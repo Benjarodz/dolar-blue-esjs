@@ -1,0 +1,62 @@
+importar { Terminal } desde '@es-js/terminal'
+importar { validarSecreto } desde "https://desarrollo-aplicaciones.vercel.app/2024/code/validar-secreto.js"
+importar { obtenerJson } desde "https://desarrollo-aplicaciones.vercel.app/2024/code/obtener-json.js"
+
+// Compatibilidad para el entorno local de Vite/Vercel (define las funciones globales que el editor EsJS inyecta automáticamente)
+si (tipoDe pedirTexto === 'undefined') {
+  globalThis.pedirTexto = Terminal.leer
+}
+si (tipoDe escribir === 'undefined') {
+  globalThis.escribir = Terminal.escribir
+}
+
+/**
+ * Función principal del programa.
+ * Solicita los datos de autenticación, valida la palabra secreta
+ * y obtiene la cotización actual del Dólar Blue.
+ */
+asincrono funcion inicio() {
+  Terminal.limpiar()
+
+  // 1. Solicitar el DNI del usuario (solo números)
+  const dni = esperar pedirTexto("Ingrese su DNI (solo números):")
+
+  // 2. Solicitar la Palabra Secreta del usuario
+  const palabraSecreta = esperar pedirTexto("Ingrese su Palabra Secreta:")
+
+  // Mostrar estado de validación en progreso
+  escribir("Validando...")
+
+  // Validar la palabra secreta utilizando la función externa provista
+  const esValido = esperar validarSecreto(dni, palabraSecreta)
+
+  // Si la palabra secreta es incorrecta, mostrar mensaje y finalizar el programa
+  si (!esValido) {
+    escribir("Palabra secreta incorrecta.")
+    retornar
+  }
+
+  // Si es válida, indicar acceso autorizado y proceder
+  escribir("Acceso autorizado.")
+  escribir("Obteniendo cotización...")
+
+  intentar {
+    // Consumir la API para obtener el JSON de cotización del dólar blue
+    const cotizacion = esperar obtenerJson("https://dolarapi.com/v1/dolares/blue")
+
+    // Calcular el promedio entre compra y venta en JavaScript
+    const promedio = (cotizacion.compra + cotizacion.venta) / 2
+
+    // Mostrar los resultados obtenidos
+    escribir("Precio de compra: $" + cotizacion.compra)
+    escribir("Precio de venta: $" + cotizacion.venta)
+    escribir("Promedio entre compra y venta: $" + promedio)
+    escribir("Fecha de actualización: " + cotizacion.fechaActualizacion)
+  } capturar (error) {
+    // Mostrar mensaje de error si no es posible obtener la cotización
+    escribir("No fue posible obtener la cotización del dólar.")
+  }
+}
+
+// Ejecutar la función principal de inicio
+inicio()
