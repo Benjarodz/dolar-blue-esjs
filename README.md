@@ -44,7 +44,6 @@ cd dolar-blue-esjs
 
 Por ejemplo, con VS Code puedes utilizar la extensión **Live Server**.
 
-
 ## 📌 Objetivo
 
 Este proyecto fue desarrollado como práctica de desarrollo web utilizando JavaScript moderno, consumo de APIs y manipulación del DOM.
