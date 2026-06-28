@@ -44,9 +44,6 @@ cd dolar-blue-esjs
 
 Por ejemplo, con VS Code puedes utilizar la extensión **Live Server**.
 
-## 📸 Capturas
-
-Agrega aquí capturas de la aplicación.
 
 ## 📌 Objetivo
 
